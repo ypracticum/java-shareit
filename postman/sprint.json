@@ -1,45 +1,70 @@
 {
 	"info": {
-		"_postman_id": "948e251a-c1d8-4325-9bd9-38e5dfaa5579",
-		"name": "Sprint 13 ShareIt (add-controllers)",
+		"_postman_id": "ef97c74f-7d4b-44b1-b210-b98b3147f0b3",
+		"name": "Sprint 14 ShareIt (add-controllers)",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "2036415"
+		"_exporter_id": "23073145",
+		"_collection_link": "https://universal-shadow-295426.postman.co/workspace/My-Workspace~4200f6aa-0504-44b1-8a1d-707d0dcbd5ce/collection/13708500-ef97c74f-7d4b-44b1-b210-b98b3147f0b3?action=share&source=collection_link&creator=23073145"
 	},
 	"item": [
 		{
 			"name": "users",
 			"item": [
 				{
-					"name": "User create",
+					"name": "Create user",
 					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const main = async () => {\r",
+									"    const api = new API(pm);\r",
+									"    const rnd = new RandomUtils();\r",
+									"\r",
+									"    try {\r",
+									"        user = rnd.getUser();\r",
+									"        pm.collectionVariables.set(\"userName\", user.name);\r",
+									"        pm.collectionVariables.set(\"userEmail\", user.email);\r",
+									"    } catch(err) {\r",
+									"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+									"    }\r",
+									"\r",
+									"};\r",
+									"\r",
+									"const interval = setInterval(() => {}, 1000);\r",
+									"\r",
+									"setTimeout(async () => \r",
+									"    {\r",
+									"        try {\r",
+									"            await main();\r",
+									"        } catch (e) {\r",
+									"            console.error(e);\r",
+									"        } finally {\r",
+									"            clearInterval(interval);\r",
+									"        }\r",
+									"    },  \r",
+									"    100 \r",
+									");"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code is 200 or 201\", function () {",
-									"    pm.expect(pm.response.code).to.be.oneOf([200,201]);",
-									"});",
-									"pm.test(\"Has user create response\", function () {",
-									"    pm.response.to.be.withBody;",
-									"    pm.response.to.be.json;",
-									"});",
-									"pm.test(\"Test user 'id' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('id');",
-									"    pm.expect(jsonData.id, '\"id\" must be 1').to.eql(1);",
-									"});",
-									"pm.test(\"Test user 'email' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('email');",
-									"    pm.expect(jsonData.email, '\"email\" must be \"user@user.com\"').to.eql('user@user.com');",
-									"});",
-									"pm.test(\"Test user 'name' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('name');",
-									"    pm.expect(jsonData.name, '\"name\" must be \"user\"').to.eql('user');",
-									"});"
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.be.ok;\r",
+									"});\r",
+									"pm.test(\"Response have body\", function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -48,24 +73,19 @@
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Accept",
-								"value": "*/*",
-								"type": "text"
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"user\",\n    \"email\": \"user@user.com\"\n}"
+							"raw": "{\n    \"name\": \"{{userName}}\",\n    \"email\": \"{{userEmail}}\"\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/users",
+							"raw": "localhost:8080/users",
 							"host": [
-								"{{baseUrl}}"
+								"localhost"
 							],
+							"port": "8080",
 							"path": [
 								"users"
 							]
@@ -74,17 +94,60 @@
 					"response": []
 				},
 				{
-					"name": "User create duplicate email",
+					"name": "Create user without email",
 					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const main = async () => {\r",
+									"    const api = new API(pm);\r",
+									"    const rnd = new RandomUtils();\r",
+									"\r",
+									"    try {\r",
+									"        user2 = rnd.getUser();\r",
+									"        pm.collectionVariables.set(\"userName\", user2.name);\r",
+									"        pm.collectionVariables.set(\"userEmail\", user2.email);\r",
+									"    } catch(err) {\r",
+									"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+									"    }\r",
+									"\r",
+									"};\r",
+									"\r",
+									"const interval = setInterval(() => {}, 1000);\r",
+									"\r",
+									"setTimeout(async () => \r",
+									"    {\r",
+									"        try {\r",
+									"            await main();\r",
+									"        } catch (e) {\r",
+									"            console.error(e);\r",
+									"        } finally {\r",
+									"            clearInterval(interval);\r",
+									"        }\r",
+									"    },  \r",
+									"    100 \r",
+									");"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code is 409\", function () {",
-									"    pm.expect(pm.response.code).to.be.oneOf([409, 500]);",
-									"});"
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"pm.test(\"Response have body\", function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -93,24 +156,19 @@
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Accept",
-								"value": "*/*",
-								"type": "text"
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"user\",\n    \"email\": \"user@user.com\"\n}"
+							"raw": "{\n    \"name\": \"{{userName}}\"\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/users",
+							"raw": "localhost:8080/users",
 							"host": [
-								"{{baseUrl}}"
+								"localhost"
 							],
+							"port": "8080",
 							"path": [
 								"users"
 							]
@@ -119,17 +177,63 @@
 					"response": []
 				},
 				{
-					"name": "User create fail no email",
+					"name": "Create 2 users with same email",
 					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const main = async () => {\r",
+									"    const api = new API(pm);\r",
+									"    const rnd = new RandomUtils();\r",
+									"\r",
+									"    try {\r",
+									"        user1 = rnd.getUser();\r",
+									"        us = await api.addUser(user1);\r",
+									"        user2 = rnd.getUser();\r",
+									"        user2.email = user1.email;\r",
+									"        pm.collectionVariables.set(\"userName\", user2.name);\r",
+									"        pm.collectionVariables.set(\"userEmail\", user2.email);\r",
+									"    } catch(err) {\r",
+									"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+									"    }\r",
+									"\r",
+									"};\r",
+									"\r",
+									"const interval = setInterval(() => {}, 1000);\r",
+									"\r",
+									"setTimeout(async () => \r",
+									"    {\r",
+									"        try {\r",
+									"            await main();\r",
+									"        } catch (e) {\r",
+									"            console.error(e);\r",
+									"        } finally {\r",
+									"            clearInterval(interval);\r",
+									"        }\r",
+									"    },  \r",
+									"    100 \r",
+									");"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code is 400\", function () {",
-									"    pm.expect(pm.response.code).to.be.oneOf([400]);",
-									"});"
+									"pm.test(\"Status code is 409\", function () {\r",
+									"    pm.response.to.have.status(409);\r",
+									"});\r",
+									"pm.test(\"Response have body\", function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -138,24 +242,19 @@
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Accept",
-								"value": "*/*",
-								"type": "text"
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"user\"\n}"
+							"raw": "{\n    \"name\": \"{{userName}}\",\n    \"email\": \"{{userEmail}}\"\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/users",
+							"raw": "localhost:8080/users",
 							"host": [
-								"{{baseUrl}}"
+								"localhost"
 							],
+							"port": "8080",
 							"path": [
 								"users"
 							]
@@ -164,17 +263,60 @@
 					"response": []
 				},
 				{
-					"name": "User create fail invalid email",
+					"name": "Create user with invalid email",
 					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const main = async () => {\r",
+									"    const api = new API(pm);\r",
+									"    const rnd = new RandomUtils();\r",
+									"\r",
+									"    try {\r",
+									"        user = rnd.getUser();\r",
+									"        pm.collectionVariables.set(\"userName\", user.name);\r",
+									"        pm.collectionVariables.set(\"userEmail\", user.email);\r",
+									"    } catch(err) {\r",
+									"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+									"    }\r",
+									"\r",
+									"};\r",
+									"\r",
+									"const interval = setInterval(() => {}, 1000);\r",
+									"\r",
+									"setTimeout(async () => \r",
+									"    {\r",
+									"        try {\r",
+									"            await main();\r",
+									"        } catch (e) {\r",
+									"            console.error(e);\r",
+									"        } finally {\r",
+									"            clearInterval(interval);\r",
+									"        }\r",
+									"    },  \r",
+									"    100 \r",
+									");"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code is 400\", function () {",
-									"    pm.expect(pm.response.code).to.be.oneOf([400]);",
-									"});"
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"pm.test(\"Response have body\", function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -183,24 +325,19 @@
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Accept",
-								"value": "*/*",
-								"type": "text"
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"user\",\n    \"email\": \"user.com\"\n}"
+							"raw": "{\n    \"name\": \"{{userName}}\",\n    \"email\": \"user.com\"\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/users",
+							"raw": "localhost:8080/users",
 							"host": [
-								"{{baseUrl}}"
+								"localhost"
 							],
+							"port": "8080",
 							"path": [
 								"users"
 							]
@@ -212,33 +349,78 @@
 					"name": "User update",
 					"event": [
 						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const main = async () => {\r",
+									"    const api = new API(pm);\r",
+									"    const rnd = new RandomUtils();\r",
+									"\r",
+									"    try {\r",
+									"        user = rnd.getUser();\r",
+									"        us = await api.addUser(user);\r",
+									"        pm.collectionVariables.set(\"userId\", us.id);\r",
+									"        us = rnd.getUser()\r",
+									"        pm.collectionVariables.set(\"userName\", us.name);\r",
+									"        pm.collectionVariables.set(\"userEmail\", us.email);\r",
+									"    } catch(err) {\r",
+									"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+									"    }\r",
+									"\r",
+									"};\r",
+									"\r",
+									"const interval = setInterval(() => {}, 1000);\r",
+									"\r",
+									"setTimeout(async () => \r",
+									"    {\r",
+									"        try {\r",
+									"            await main();\r",
+									"        } catch (e) {\r",
+									"            console.error(e);\r",
+									"        } finally {\r",
+									"            clearInterval(interval);\r",
+									"        }\r",
+									"    },  \r",
+									"    100 \r",
+									");"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.be.ok;",
-									"});",
-									"pm.test(\"Has user update response\", function () {",
-									"    pm.response.to.be.withBody;",
-									"    pm.response.to.be.json;",
-									"});",
-									"pm.test(\"Test user 'id' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('id');",
-									"    pm.expect(jsonData.id, '\"id\" must be 1').to.eql(1);",
-									"});",
-									"pm.test(\"Test user 'email' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('email');",
-									"    pm.expect(jsonData.email, '\"email\" must be \"update@user.com\"').to.eql('update@user.com');",
-									"});",
-									"pm.test(\"Test user 'name' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('name');",
-									"    pm.expect(jsonData.name, '\"name\" must be \"update\"').to.eql('update');",
-									"});"
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.be.ok;\r",
+									"});\r",
+									"pm.test(\"Response have body\", function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"pm.test(\"Test user 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('id');\r",
+									"    var id = pm.collectionVariables.get(\"userId\");\r",
+									"    pm.expect(jsonData.id, '\"id\" must be ' + id).to.eql(id);\r",
+									"});\r",
+									"pm.test(\"Test user 'email' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('email');\r",
+									"    var email = pm.collectionVariables.get(\"userEmail\");\r",
+									"    pm.expect(jsonData.email, '\"email\" must be ' + email).to.eql(email);\r",
+									"});\r",
+									"pm.test(\"Test user 'name' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('name');\r",
+									"    var name = pm.collectionVariables.get(\"userName\");\r",
+									"    pm.expect(jsonData.name, '\"name\" must be ' + name).to.eql(name);\r",
+									"});\r",
+									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -247,97 +429,21 @@
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Accept",
-								"value": "*/*",
-								"type": "text"
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"update\",\n    \"email\": \"update@user.com\"\n}"
+							"raw": "{\n    \"name\": \"{{userName}}\",\n    \"email\": \"{{userEmail}}\"\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/users/:userId",
+							"raw": "{{baseUrl}}/users/{{userId}}",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"users",
-								":userId"
-							],
-							"variable": [
-								{
-									"key": "userId",
-									"value": "1"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "User create",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200 or 201\", function () {",
-									"    pm.expect(pm.response.code).to.be.oneOf([200,201]);",
-									"});",
-									"pm.test(\"Has user create response\", function () {",
-									"    pm.response.to.be.withBody;",
-									"    pm.response.to.be.json;",
-									"});",
-									"pm.test(\"Test user 'id' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('id');",
-									"    pm.expect(jsonData.id, '\"id\" must be 1').to.eql(2);",
-									"});",
-									"pm.test(\"Test user 'email' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('email');",
-									"    pm.expect(jsonData.email, '\"email\" must be \"user@user.com\"').to.eql('user@user.com');",
-									"});",
-									"pm.test(\"Test user 'name' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('name');",
-									"    pm.expect(jsonData.name, '\"name\" must be \"user\"').to.eql('user');",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Accept",
-								"value": "*/*",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"user\",\n    \"email\": \"user@user.com\"\n}"
-						},
-						"url": {
-							"raw": "{{baseUrl}}/users",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"users"
+								"{{userId}}"
 							]
 						}
 					},
@@ -347,34 +453,72 @@
 					"name": "User update name",
 					"event": [
 						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const main = async () => {\r",
+									"    const api = new API(pm);\r",
+									"    const rnd = new RandomUtils();\r",
+									"\r",
+									"    try {\r",
+									"        user = rnd.getUser();\r",
+									"        us = await api.addUser(user);\r",
+									"        pm.collectionVariables.set(\"userId\", us.id);\r",
+									"        us = rnd.getUser()\r",
+									"        pm.collectionVariables.set(\"userName\", us.name);\r",
+									"        pm.collectionVariables.set(\"userEmail\", us.email);\r",
+									"    } catch(err) {\r",
+									"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+									"    }\r",
+									"\r",
+									"};\r",
+									"\r",
+									"const interval = setInterval(() => {}, 1000);\r",
+									"\r",
+									"setTimeout(async () => \r",
+									"    {\r",
+									"        try {\r",
+									"            await main();\r",
+									"        } catch (e) {\r",
+									"            console.error(e);\r",
+									"        } finally {\r",
+									"            clearInterval(interval);\r",
+									"        }\r",
+									"    },  \r",
+									"    100 \r",
+									");"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.be.ok;",
-									"});",
-									"pm.test(\"Has user update response\", function () {",
-									"    pm.response.to.be.withBody;",
-									"    pm.response.to.be.json;",
-									"});",
-									"pm.test(\"Test user 'id' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('id');",
-									"    pm.expect(jsonData.id, '\"id\" must be 1').to.eql(1);",
-									"});",
-									"pm.test(\"Test user 'email' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('email');",
-									"    pm.expect(jsonData.email, '\"email\" must be \"update@user.com\"').to.eql('update@user.com');",
-									"});",
-									"pm.test(\"Test user 'name' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('name');",
-									"    pm.expect(jsonData.name, '\"name\" must be \"updateName\"').to.eql('updateName');",
-									"});",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.be.ok;\r",
+									"});\r",
+									"pm.test(\"Response have body\", function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"pm.test(\"Test user 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('id');\r",
+									"    var id = pm.collectionVariables.get(\"userId\");\r",
+									"    pm.expect(jsonData.id, '\"id\" must be ' + id).to.eql(id);\r",
+									"});\r",
+									"pm.test(\"Test user 'name' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('name');\r",
+									"    var name = pm.collectionVariables.get(\"userName\");\r",
+									"    pm.expect(jsonData.name, '\"name\" must be ' + name).to.eql(name);\r",
+									"});\r",
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -383,33 +527,21 @@
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Accept",
-								"value": "*/*",
-								"type": "text"
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"updateName\"\n}"
+							"raw": "{\n    \"name\": \"{{userName}}\"\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/users/:userId",
+							"raw": "{{baseUrl}}/users/{{userId}}",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"users",
-								":userId"
-							],
-							"variable": [
-								{
-									"key": "userId",
-									"value": "1"
-								}
+								"{{userId}}"
 							]
 						}
 					},
@@ -419,34 +551,71 @@
 					"name": "User update email",
 					"event": [
 						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const main = async () => {\r",
+									"    const api = new API(pm);\r",
+									"    const rnd = new RandomUtils();\r",
+									"\r",
+									"    try {\r",
+									"        user = rnd.getUser();\r",
+									"        us = await api.addUser(user);\r",
+									"        pm.collectionVariables.set(\"userId\", us.id);\r",
+									"        us = rnd.getUser()\r",
+									"        pm.collectionVariables.set(\"userName\", us.name);\r",
+									"        pm.collectionVariables.set(\"userEmail\", us.email);\r",
+									"    } catch(err) {\r",
+									"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+									"    }\r",
+									"\r",
+									"};\r",
+									"\r",
+									"const interval = setInterval(() => {}, 1000);\r",
+									"\r",
+									"setTimeout(async () => \r",
+									"    {\r",
+									"        try {\r",
+									"            await main();\r",
+									"        } catch (e) {\r",
+									"            console.error(e);\r",
+									"        } finally {\r",
+									"            clearInterval(interval);\r",
+									"        }\r",
+									"    },  \r",
+									"    100 \r",
+									");"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.be.ok;",
-									"});",
-									"pm.test(\"Has user update response\", function () {",
-									"    pm.response.to.be.withBody;",
-									"    pm.response.to.be.json;",
-									"});",
-									"pm.test(\"Test user 'id' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('id');",
-									"    pm.expect(jsonData.id, '\"id\" must be 1').to.eql(1);",
-									"});",
-									"pm.test(\"Test user 'email' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('email');",
-									"    pm.expect(jsonData.email, '\"email\" must be \"updateName@user.com\"').to.eql('updateName@user.com');",
-									"});",
-									"pm.test(\"Test user 'name' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('name');",
-									"    pm.expect(jsonData.name, '\"name\" must be \"updateName\"').to.eql('updateName');",
-									"});",
-									""
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.be.ok;\r",
+									"});\r",
+									"pm.test(\"Response have body\", function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"pm.test(\"Test user 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('id');\r",
+									"    var id = pm.collectionVariables.get(\"userId\");\r",
+									"    pm.expect(jsonData.id, '\"id\" must be ' + id).to.eql(id);\r",
+									"});\r",
+									"pm.test(\"Test user 'email' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('email');\r",
+									"    var email = pm.collectionVariables.get(\"userEmail\");\r",
+									"    pm.expect(jsonData.email, '\"email\" must be ' + email).to.eql(email);\r",
+									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -455,70 +624,86 @@
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Accept",
-								"value": "*/*",
-								"type": "text"
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"updateName@user.com\"\n}"
+							"raw": "{\n    \"email\": \"{{userEmail}}\"\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/users/:userId",
+							"raw": "{{baseUrl}}/users/{{userId}}",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"users",
-								":userId"
-							],
-							"variable": [
-								{
-									"key": "userId",
-									"value": "1"
-								}
+								"{{userId}}"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "User update with same email",
+					"name": "User update with existing email",
 					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const main = async () => {\r",
+									"    const api = new API(pm);\r",
+									"    const rnd = new RandomUtils();\r",
+									"\r",
+									"    try {\r",
+									"        user = rnd.getUser();\r",
+									"        us = await api.addUser(user);\r",
+									"        user2 = rnd.getUser();\r",
+									"        us2 = await api.addUser(user2)\r",
+									"        pm.collectionVariables.set(\"userId\", us2.id);\r",
+									"        usa = rnd.getUser()\r",
+									"        pm.collectionVariables.set(\"userName\", usa.name);\r",
+									"        pm.collectionVariables.set(\"userEmail\", user.email);\r",
+									"    } catch(err) {\r",
+									"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+									"    }\r",
+									"\r",
+									"};\r",
+									"\r",
+									"const interval = setInterval(() => {}, 1000);\r",
+									"\r",
+									"setTimeout(async () => \r",
+									"    {\r",
+									"        try {\r",
+									"            await main();\r",
+									"        } catch (e) {\r",
+									"            console.error(e);\r",
+									"        } finally {\r",
+									"            clearInterval(interval);\r",
+									"        }\r",
+									"    },  \r",
+									"    100 \r",
+									");"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.be.ok;",
-									"});",
-									"pm.test(\"Has user update response\", function () {",
-									"    pm.response.to.be.withBody;",
-									"    pm.response.to.be.json;",
-									"});",
-									"pm.test(\"Test user 'id' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('id');",
-									"    pm.expect(jsonData.id, '\"id\" must be 1').to.eql(1);",
-									"});",
-									"pm.test(\"Test user 'email' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('email');",
-									"    pm.expect(jsonData.email, '\"email\" must be \"updateName@user.com\"').to.eql('updateName@user.com');",
-									"});",
-									"pm.test(\"Test user 'name' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('name');",
-									"    pm.expect(jsonData.name, '\"name\" must be \"updateName\"').to.eql('updateName');",
-									"});",
+									"pm.test(\"Status code is 409\", function () {\r",
+									"    pm.response.to.have.status(409);\r",
+									"});\r",
+									"pm.test(\"Response have body\", function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -527,212 +712,128 @@
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Accept",
-								"value": "*/*",
-								"type": "text"
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"updateName@user.com\"\n}"
+							"raw": "{\n    \"name\": \"{{userName}}\",\n    \"email\": \"{{userEmail}}\"\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/users/:userId",
+							"raw": "{{baseUrl}}/users/{{userId}}",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"users",
-								":userId"
-							],
-							"variable": [
-								{
-									"key": "userId",
-									"value": "1"
-								}
+								"{{userId}}"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "User name update email exists",
+					"name": "Get user",
 					"event": [
 						{
-							"listen": "test",
+							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code is 409\", function () {",
-									"    pm.expect(pm.response.code).to.be.oneOf([409, 500]);",
-									"});",
-									""
+									"const main = async () => {\r",
+									"    const api = new API(pm);\r",
+									"    const rnd = new RandomUtils();\r",
+									"\r",
+									"    try {\r",
+									"        user = rnd.getUser();\r",
+									"        us = await api.addUser(user);\r",
+									"        pm.collectionVariables.set(\"userId\", us.id);\r",
+									"        pm.collectionVariables.set(\"userName\", us.name);\r",
+									"        pm.collectionVariables.set(\"userEmail\", us.email);\r",
+									"\r",
+									"    } catch(err) {\r",
+									"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+									"    }\r",
+									"\r",
+									"};\r",
+									"\r",
+									"const interval = setInterval(() => {}, 1000);\r",
+									"\r",
+									"setTimeout(async () => \r",
+									"    {\r",
+									"        try {\r",
+									"            await main();\r",
+									"        } catch (e) {\r",
+									"            console.error(e);\r",
+									"        } finally {\r",
+									"            clearInterval(interval);\r",
+									"        }\r",
+									"    },  \r",
+									"    100 \r",
+									");"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
-						}
-					],
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Accept",
-								"value": "*/*",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"email\": \"user@user.com\"\n}"
 						},
-						"url": {
-							"raw": "{{baseUrl}}/users/:userId",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"users",
-								":userId"
-							],
-							"variable": [
-								{
-									"key": "userId",
-									"value": "1"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "User get updated",
-					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.be.ok;",
-									"});",
-									"pm.test(\"Has user update response\", function () {",
-									"    pm.response.to.be.withBody;",
-									"    pm.response.to.be.json;",
-									"});",
-									"pm.test(\"Test user 'id' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('id');",
-									"    pm.expect(jsonData.id, '\"id\" must be 1').to.eql(1);",
-									"});",
-									"pm.test(\"Test user 'email' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('email');",
-									"    pm.expect(jsonData.email, '\"email\" must be \"updateName@user.com\"').to.eql('updateName@user.com');",
-									"});",
-									"pm.test(\"Test user 'name' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('name');",
-									"    pm.expect(jsonData.name, '\"name\" must be \"updateName\"').to.eql('updateName');",
-									"});",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.be.ok;\r",
+									"});\r",
+									"pm.test(\"Response have body\", function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"pm.test(\"Test user 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('id');\r",
+									"    var id = pm.collectionVariables.get(\"userId\");\r",
+									"    pm.expect(jsonData.id, '\"id\" must be ' + id).to.eql(id);\r",
+									"});\r",
+									"pm.test(\"Test user 'email' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('email');\r",
+									"    var email = pm.collectionVariables.get(\"userEmail\");\r",
+									"    pm.expect(jsonData.email, '\"email\" must be ' + email).to.eql(email);\r",
+									"});\r",
+									"pm.test(\"Test user 'name' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('name');\r",
+									"    var name = pm.collectionVariables.get(\"userName\");\r",
+									"    pm.expect(jsonData.name, '\"name\" must be ' + name).to.eql(name);\r",
+									"});\r",
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [
 							{
-								"key": "Accept",
-								"value": "*/*",
-								"type": "text"
+								"key": "Content-Type",
+								"value": "application/json"
 							}
 						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
-							"raw": "{{baseUrl}}/users/:userId",
+							"raw": "{{baseUrl}}/users/{{userId}}",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"users",
-								":userId"
-							],
-							"variable": [
-								{
-									"key": "userId",
-									"value": "1"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "User get",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.be.ok;",
-									"});",
-									"pm.test(\"Has user update response\", function () {",
-									"    pm.response.to.be.withBody;",
-									"    pm.response.to.be.json;",
-									"});",
-									"pm.test(\"Test user 'id' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('id');",
-									"    pm.expect(jsonData.id, '\"id\" must be 2').to.eql(2);",
-									"});",
-									"pm.test(\"Test user 'email' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('email');",
-									"    pm.expect(jsonData.email, '\"email\" must be \"user@user.com\"').to.eql('user@user.com');",
-									"});",
-									"pm.test(\"Test user 'name' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('name');",
-									"    pm.expect(jsonData.name, '\"name\" must be \"user\"').to.eql('user');",
-									"});",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "*/*",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{baseUrl}}/users/:userId",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"users",
-								":userId"
-							],
-							"variable": [
-								{
-									"key": "userId",
-									"value": "2"
-								}
+								"{{userId}}"
 							]
 						}
 					},
@@ -750,7 +851,48 @@
 									"});",
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const main = async () => {\r",
+									"    const api = new API(pm);\r",
+									"    const rnd = new RandomUtils();\r",
+									"\r",
+									"    try {\r",
+									"        user = rnd.getUser();\r",
+									"        us = await api.addUser(user);\r",
+									"        pm.collectionVariables.set(\"userId\", us.id);\r",
+									"        pm.collectionVariables.set(\"userName\", us.name);\r",
+									"        pm.collectionVariables.set(\"userEmail\", us.email);\r",
+									"\r",
+									"    } catch(err) {\r",
+									"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+									"    }\r",
+									"\r",
+									"};\r",
+									"\r",
+									"const interval = setInterval(() => {}, 1000);\r",
+									"\r",
+									"setTimeout(async () => \r",
+									"    {\r",
+									"        try {\r",
+									"            await main();\r",
+									"        } catch (e) {\r",
+									"            console.error(e);\r",
+									"        } finally {\r",
+									"            clearInterval(interval);\r",
+									"        }\r",
+									"    },  \r",
+									"    100 \r",
+									");"
+								],
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -764,158 +906,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/users/:userId",
+							"raw": "{{baseUrl}}/users/{{userId}}",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"users",
-								":userId"
-							],
-							"variable": [
-								{
-									"key": "userId",
-									"value": "2"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "User create after delete",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200 or 201\", function () {",
-									"    pm.expect(pm.response.code).to.be.oneOf([200,201]);",
-									"});",
-									"pm.test(\"Has user create response\", function () {",
-									"    pm.response.to.be.withBody;",
-									"    pm.response.to.be.json;",
-									"});",
-									"pm.test(\"Test user 'id' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('id');",
-									"    pm.expect(jsonData.id, '\"id\" must be 3').to.eql(3);",
-									"});",
-									"pm.test(\"Test user 'email' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('email');",
-									"    pm.expect(jsonData.email, '\"email\" must be \"user@user.com\"').to.eql('user@user.com');",
-									"});",
-									"pm.test(\"Test user 'name' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('name');",
-									"    pm.expect(jsonData.name, '\"name\" must be \"user\"').to.eql('user');",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Accept",
-								"value": "*/*",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"user\",\n    \"email\": \"user@user.com\"\n}"
-						},
-						"url": {
-							"raw": "{{baseUrl}}/users",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "User get all",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.be.ok;",
-									"});",
-									"pm.test(\"Test list user response\", function () {",
-									"    pm.response.to.be.withBody;",
-									"    pm.response.to.be.json;",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.length, 'List length must be 2').to.eql(2);",
-									"});",
-									"",
-									"pm.test(\"Test user[0] 'id' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0]).to.have.property('id');",
-									"    pm.expect(jsonData[0].id, '\"id\" must be 1').to.eql(1);",
-									"});",
-									"pm.test(\"Test user[0] 'email' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0]).to.have.property('email');",
-									"    pm.expect(jsonData[0].email, '\"email\" must be \"updateName@user.com\"').to.eql('updateName@user.com');",
-									"});",
-									"pm.test(\"Test user[0] 'name' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0]).to.have.property('name');",
-									"    pm.expect(jsonData[0].name, '\"name\" must be \"updateName\"').to.eql('updateName');",
-									"});",
-									"",
-									"pm.test(\"Test user[1] 'id' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[1]).to.have.property('id');",
-									"    pm.expect(jsonData[1].id, '\"id\" must be 3').to.eql(3);",
-									"});",
-									"pm.test(\"Test user[1] 'email' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[1]).to.have.property('email');",
-									"    pm.expect(jsonData[1].email, '\"email\" must be \"user@user.com\"').to.eql('user@user.com');",
-									"});",
-									"pm.test(\"Test user[1] 'name' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[1]).to.have.property('name');",
-									"    pm.expect(jsonData[1].name, '\"name\" must be \"user\"').to.eql('user');",
-									"});",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "*/*",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{baseUrl}}/users",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"users"
+								"{{userId}}"
 							]
 						}
 					},
@@ -930,38 +927,73 @@
 					"name": "Item create",
 					"event": [
 						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const main = async () => {\r",
+									"    const api = new API(pm);\r",
+									"    const rnd = new RandomUtils();\r",
+									"\r",
+									"    try {\r",
+									"        item = rnd.getItem();\r",
+									"        pm.collectionVariables.set(\"item\", item);\r",
+									"        pm.collectionVariables.set(\"itemName\", item.name);\r",
+									"        pm.collectionVariables.set(\"itemAvailable\", item.available);\r",
+									"        pm.collectionVariables.set(\"itemDescription\", item.description);\r",
+									"        user = await api.addUser(rnd.getUser());\r",
+									"        pm.collectionVariables.set(\"userId\", user.id);\r",
+									"\r",
+									"    } catch(err) {\r",
+									"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+									"    }\r",
+									"\r",
+									"};\r",
+									"\r",
+									"const interval = setInterval(() => {}, 1000);\r",
+									"\r",
+									"setTimeout(async () => \r",
+									"    {\r",
+									"        try {\r",
+									"            await main();\r",
+									"        } catch (e) {\r",
+									"            console.error(e);\r",
+									"        } finally {\r",
+									"            clearInterval(interval);\r",
+									"        }\r",
+									"    },  \r",
+									"    100 \r",
+									");"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code is 200 or 201\", function () {",
-									"    pm.expect(pm.response.code).to.be.oneOf([200,201]);",
-									"});",
-									"pm.test(\"Has item create response\", function () {",
-									"    pm.response.to.be.withBody;",
-									"    pm.response.to.be.json;",
-									"});",
-									"pm.test(\"Test item 'id' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('id');",
-									"    pm.expect(jsonData.id, '\"id\" must be 1').to.eql(1);",
-									"});",
-									"pm.test(\"Test item 'name' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('name');",
-									"    pm.expect(jsonData.name, '\"name\" must be \"Дрель\"').to.eql('Дрель');",
-									"});",
-									"pm.test(\"Test item 'description' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('description');",
-									"    pm.expect(jsonData.description, '\"description\" must be \"Простая дрель\"').to.eql('Простая дрель');",
-									"});",
-									"pm.test(\"Test item 'available' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('available');",
-									"    pm.expect(jsonData.available, '\"available\" must be \"true\"').to.true;",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.be.ok;\r",
+									"});\r",
+									"pm.test(\"Response have body\", function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"var item = pm.collectionVariables.get(\"item\");\r",
+									"\r",
+									"pm.test(\"Response data equal to request\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('id');\r",
+									"    pm.expect(jsonData).to.have.property('name');\r",
+									"    pm.expect(jsonData).to.have.property('description');\r",
+									"    pm.expect(jsonData).to.have.property('available');\r",
+									"    pm.expect(jsonData.name, `\"name\" must be ${item.name}`).to.eql(item.name);\r",
+									"    pm.expect(jsonData.description, `\"description\" must be ${item.description}`).to.eql(item.description);\r",
+									"    pm.expect(jsonData.available.toString(), `\"available\" must be ${item.available}`).to.eql(item.available.toString());\r",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -969,30 +1001,24 @@
 						"method": "POST",
 						"header": [
 							{
-								"key": "X-Sharer-User-Id",
-								"value": "1",
-								"type": "text"
-							},
-							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
+								"value": "application/json"
 							},
 							{
-								"key": "Accept",
-								"value": "*/*",
-								"type": "text"
+								"key": "X-Sharer-User-Id",
+								"value": "{{userId}}"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Дрель\",\n    \"description\": \"Простая дрель\",\n    \"available\": true\n}"
+							"raw": "{\n    \"name\": \"{{itemName}}\",\n    \"description\": \"{{itemDescription}}\",\n    \"available\": {{itemAvailable}}\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items",
+							"raw": "localhost:8080/items",
 							"host": [
-								"{{baseUrl}}"
+								"localhost"
 							],
+							"port": "8080",
 							"path": [
 								"items"
 							]
@@ -1004,15 +1030,58 @@
 					"name": "Item create without X-Sharer-User-Id",
 					"event": [
 						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const main = async () => {\r",
+									"    const api = new API(pm);\r",
+									"    const rnd = new RandomUtils();\r",
+									"\r",
+									"    try {\r",
+									"        item = rnd.getItem();\r",
+									"        pm.collectionVariables.set(\"item\", item);\r",
+									"        pm.collectionVariables.set(\"itemName\", item.name);\r",
+									"        pm.collectionVariables.set(\"itemAvailable\", item.available);\r",
+									"        pm.collectionVariables.set(\"itemDescription\", item.description);\r",
+									"        user = await api.addUser(rnd.getUser());\r",
+									"        pm.collectionVariables.set(\"userId\", user.id);\r",
+									"\r",
+									"    } catch(err) {\r",
+									"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+									"    }\r",
+									"\r",
+									"};\r",
+									"\r",
+									"const interval = setInterval(() => {}, 1000);\r",
+									"\r",
+									"setTimeout(async () => \r",
+									"    {\r",
+									"        try {\r",
+									"            await main();\r",
+									"        } catch (e) {\r",
+									"            console.error(e);\r",
+									"        } finally {\r",
+									"            clearInterval(interval);\r",
+									"        }\r",
+									"    },  \r",
+									"    100 \r",
+									");"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code is 500\", function () {",
-									"    pm.expect(pm.response.code).to.be.oneOf([500, 400]);",
-									"});",
+									"pm.test(\"Status code is 400 or 500\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([500, 400]);\r",
+									"});\r",
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -1020,31 +1089,25 @@
 						"method": "POST",
 						"header": [
 							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
 								"key": "X-Sharer-User-Id",
-								"value": "1",
-								"type": "text",
+								"value": "{{userId}}",
 								"disabled": true
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Accept",
-								"value": "*/*",
-								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Дрель\",\n    \"description\": \"Простая дрель\",\n    \"available\": true\n}"
+							"raw": "{\n    \"name\": \"{{itemName}}\",\n    \"description\": \"{{itemDescription}}\",\n    \"available\": {{itemAvailable}}\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items",
+							"raw": "localhost:8080/items",
 							"host": [
-								"{{baseUrl}}"
+								"localhost"
 							],
+							"port": "8080",
 							"path": [
 								"items"
 							]
@@ -1053,18 +1116,61 @@
 					"response": []
 				},
 				{
-					"name": "Item create with not found user",
+					"name": "Item create with non-existent user",
 					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const main = async () => {\r",
+									"    const api = new API(pm);\r",
+									"    const rnd = new RandomUtils();\r",
+									"\r",
+									"    try {\r",
+									"        item = rnd.getItem();\r",
+									"        pm.collectionVariables.set(\"item\", item);\r",
+									"        pm.collectionVariables.set(\"itemName\", item.name);\r",
+									"        pm.collectionVariables.set(\"itemAvailable\", item.available);\r",
+									"        pm.collectionVariables.set(\"itemDescription\", item.description);\r",
+									"        user = await api.addUser(rnd.getUser());\r",
+									"        pm.collectionVariables.set(\"userId\", user.id + '1');\r",
+									"\r",
+									"    } catch(err) {\r",
+									"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+									"    }\r",
+									"\r",
+									"};\r",
+									"\r",
+									"const interval = setInterval(() => {}, 1000);\r",
+									"\r",
+									"setTimeout(async () => \r",
+									"    {\r",
+									"        try {\r",
+									"            await main();\r",
+									"        } catch (e) {\r",
+									"            console.error(e);\r",
+									"        } finally {\r",
+									"            clearInterval(interval);\r",
+									"        }\r",
+									"    },  \r",
+									"    100 \r",
+									");"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code is 404\", function () {",
-									"    pm.expect(pm.response.code).to.be.oneOf([404]);",
-									"});",
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([404]);\r",
+									"});\r",
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -1072,30 +1178,24 @@
 						"method": "POST",
 						"header": [
 							{
-								"key": "X-Sharer-User-Id",
-								"value": "10",
-								"type": "text"
-							},
-							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
+								"value": "application/json"
 							},
 							{
-								"key": "Accept",
-								"value": "*/*",
-								"type": "text"
+								"key": "X-Sharer-User-Id",
+								"value": "{{userId}}"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Дрель\",\n    \"description\": \"Простая дрель\",\n    \"available\": true\n}"
+							"raw": "{\n    \"name\": \"{{itemName}}\",\n    \"description\": \"{{itemDescription}}\",\n    \"available\": {{itemAvailable}}\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items",
+							"raw": "localhost:8080/items",
 							"host": [
-								"{{baseUrl}}"
+								"localhost"
 							],
+							"port": "8080",
 							"path": [
 								"items"
 							]
@@ -1104,18 +1204,61 @@
 					"response": []
 				},
 				{
-					"name": "Item create without available",
+					"name": "Item create without available field",
 					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const main = async () => {\r",
+									"    const api = new API(pm);\r",
+									"    const rnd = new RandomUtils();\r",
+									"\r",
+									"    try {\r",
+									"        item = rnd.getItem();\r",
+									"        pm.collectionVariables.set(\"item\", item);\r",
+									"        pm.collectionVariables.set(\"itemName\", item.name);\r",
+									"        pm.collectionVariables.set(\"itemAvailable\", item.available);\r",
+									"        pm.collectionVariables.set(\"itemDescription\", item.description);\r",
+									"        user = await api.addUser(rnd.getUser());\r",
+									"        pm.collectionVariables.set(\"userId\", user.id);\r",
+									"\r",
+									"    } catch(err) {\r",
+									"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+									"    }\r",
+									"\r",
+									"};\r",
+									"\r",
+									"const interval = setInterval(() => {}, 1000);\r",
+									"\r",
+									"setTimeout(async () => \r",
+									"    {\r",
+									"        try {\r",
+									"            await main();\r",
+									"        } catch (e) {\r",
+									"            console.error(e);\r",
+									"        } finally {\r",
+									"            clearInterval(interval);\r",
+									"        }\r",
+									"    },  \r",
+									"    100 \r",
+									");"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code is 400\", function () {",
-									"    pm.expect(pm.response.code).to.be.oneOf([400]);",
-									"});",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+									"});\r",
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -1123,30 +1266,24 @@
 						"method": "POST",
 						"header": [
 							{
-								"key": "X-Sharer-User-Id",
-								"value": "3",
-								"type": "text"
-							},
-							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
+								"value": "application/json"
 							},
 							{
-								"key": "Accept",
-								"value": "*/*",
-								"type": "text"
+								"key": "X-Sharer-User-Id",
+								"value": "{{userId}}"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Отвертка\",\n    \"description\": \"Аккумуляторная отвертка\"\n}"
+							"raw": "{\n    \"name\": \"{{itemName}}\",\n    \"description\": \"{{itemDescription}}\"\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items",
+							"raw": "localhost:8080/items",
 							"host": [
-								"{{baseUrl}}"
+								"localhost"
 							],
+							"port": "8080",
 							"path": [
 								"items"
 							]
@@ -1155,7 +1292,7 @@
 					"response": []
 				},
 				{
-					"name": "Item create with empty name",
+					"name": "Item create with empty name field",
 					"event": [
 						{
 							"listen": "test",
@@ -1206,7 +1343,7 @@
 					"response": []
 				},
 				{
-					"name": "Item create with empty description",
+					"name": "Item create with empty description field",
 					"event": [
 						{
 							"listen": "test",
@@ -1257,7 +1394,7 @@
 					"response": []
 				},
 				{
-					"name": "item update",
+					"name": "Item update",
 					"event": [
 						{
 							"listen": "test",
@@ -1266,32 +1403,70 @@
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.be.ok;",
 									"});",
-									"pm.test(\"Has item update response\", function () {",
+									"pm.test(\"Response have body\", function () {",
 									"    pm.response.to.be.withBody;",
 									"    pm.response.to.be.json;",
 									"});",
-									"pm.test(\"Test item 'id' field\", function () {",
+									"var item = pm.collectionVariables.get(\"item\");",
+									"",
+									"pm.test(\"Response data equal to request\", function () {",
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('id');",
-									"    pm.expect(jsonData.id, '\"id\" must be 1').to.eql(1);",
-									"});",
-									"pm.test(\"Test item 'name' field\", function () {",
-									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('name');",
-									"    pm.expect(jsonData.name, '\"name\" must be \"Дрель+\"').to.eql('Дрель+');",
-									"});",
-									"pm.test(\"Test item 'description' field\", function () {",
-									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('description');",
-									"    pm.expect(jsonData.description, '\"description\" must be \"Аккумуляторная дрель\"').to.eql('Аккумуляторная дрель');",
-									"});",
-									"pm.test(\"Test item 'available' field\", function () {",
-									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('available');",
-									"    pm.expect(jsonData.available, '\"available\" must be \"false\"').to.false;",
+									"    pm.expect(jsonData.name, `\"name\" must be ${item.name}`).to.eql(item.name);",
+									"    pm.expect(jsonData.description, `\"description\" must be ${item.description}`).to.eql(item.description);",
+									"    pm.expect(jsonData.available.toString(), `\"available\" must be ${item.available}`).to.eql(item.available.toString());",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const main = async () => {\r",
+									"    const api = new API(pm);\r",
+									"    const rnd = new RandomUtils();\r",
+									"\r",
+									"    try {\r",
+									"        user = await api.addUser(rnd.getUser());\r",
+									"        pm.collectionVariables.set(\"userId\", user.id);\r",
+									"        item = rnd.getItem();\r",
+									"        var it = await api.addItem(item, user.id)\r",
+									"        item = rnd.getItem();\r",
+									"        pm.collectionVariables.set(\"item\", item);        \r",
+									"        pm.collectionVariables.set(\"itemId\", it.id);\r",
+									"        pm.collectionVariables.set(\"itemName\", item.name);\r",
+									"        pm.collectionVariables.set(\"itemAvailable\", item.available);\r",
+									"        pm.collectionVariables.set(\"itemDescription\", item.description);\r",
+									"\r",
+									"    } catch(err) {\r",
+									"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+									"    }\r",
+									"\r",
+									"};\r",
+									"\r",
+									"const interval = setInterval(() => {}, 1000);\r",
+									"\r",
+									"setTimeout(async () => \r",
+									"    {\r",
+									"        try {\r",
+									"            await main();\r",
+									"        } catch (e) {\r",
+									"            console.error(e);\r",
+									"        } finally {\r",
+									"            clearInterval(interval);\r",
+									"        }\r",
+									"    },  \r",
+									"    100 \r",
+									");"
+								],
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -1300,7 +1475,7 @@
 						"header": [
 							{
 								"key": "X-Sharer-User-Id",
-								"value": "1",
+								"value": "{{userId}}",
 								"type": "text"
 							},
 							{
@@ -1316,29 +1491,23 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\": 1,\n    \"name\": \"Дрель+\",\n    \"description\": \"Аккумуляторная дрель\",\n    \"available\": false\n}"
+							"raw": "{\n    \"name\": \"{{itemName}}\",\n    \"description\": \"{{itemDescription}}\",\n    \"available\": {{itemAvailable}}\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items/:itemId",
+							"raw": "{{baseUrl}}/items/{{itemId}}",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"items",
-								":itemId"
-							],
-							"variable": [
-								{
-									"key": "itemId",
-									"value": "1"
-								}
+								"{{itemId}}"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "item update without  X-Sharer-User-Id",
+					"name": "Item update without  X-Sharer-User-Id",
 					"event": [
 						{
 							"listen": "test",
@@ -1348,7 +1517,53 @@
 									"    pm.expect(pm.response.code).to.be.oneOf([500, 400]);",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const main = async () => {\r",
+									"    const api = new API(pm);\r",
+									"    const rnd = new RandomUtils();\r",
+									"\r",
+									"    try {\r",
+									"        user = await api.addUser(rnd.getUser());\r",
+									"        pm.collectionVariables.set(\"userId\", user.id);\r",
+									"        item = rnd.getItem();\r",
+									"        var it = await api.addItem(item, user.id)\r",
+									"        item = rnd.getItem();\r",
+									"        pm.collectionVariables.set(\"item\", item);        \r",
+									"        pm.collectionVariables.set(\"itemId\", it.id);\r",
+									"        pm.collectionVariables.set(\"itemName\", item.name);\r",
+									"        pm.collectionVariables.set(\"itemAvailable\", item.available);\r",
+									"        pm.collectionVariables.set(\"itemDescription\", item.description);\r",
+									"\r",
+									"    } catch(err) {\r",
+									"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+									"    }\r",
+									"\r",
+									"};\r",
+									"\r",
+									"const interval = setInterval(() => {}, 1000);\r",
+									"\r",
+									"setTimeout(async () => \r",
+									"    {\r",
+									"        try {\r",
+									"            await main();\r",
+									"        } catch (e) {\r",
+									"            console.error(e);\r",
+									"        } finally {\r",
+									"            clearInterval(interval);\r",
+									"        }\r",
+									"    },  \r",
+									"    100 \r",
+									");"
+								],
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -1357,7 +1572,7 @@
 						"header": [
 							{
 								"key": "X-Sharer-User-Id",
-								"value": "1",
+								"value": "{{userId}}",
 								"type": "text",
 								"disabled": true
 							},
@@ -1374,29 +1589,23 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\": 1,\n    \"name\": \"Дрель\",\n    \"description\": \"Простая дрель\",\n    \"available\": false\n}"
+							"raw": "{\n    \"name\": \"{{itemName}}\",\n    \"description\": \"{{itemDescription}}\",\n    \"available\": {{itemAvailable}}\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items/:itemId",
+							"raw": "{{baseUrl}}/items/{{itemId}}",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"items",
-								":itemId"
-							],
-							"variable": [
-								{
-									"key": "itemId",
-									"value": "1"
-								}
+								"{{itemId}}"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "item update with other user",
+					"name": "Item update with other user",
 					"event": [
 						{
 							"listen": "test",
@@ -1406,7 +1615,53 @@
 									"    pm.expect(pm.response.code).to.be.oneOf([404, 403]);",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const main = async () => {\r",
+									"    const api = new API(pm);\r",
+									"    const rnd = new RandomUtils();\r",
+									"\r",
+									"    try {\r",
+									"        user = await api.addUser(rnd.getUser());\r",
+									"        pm.collectionVariables.set(\"userId\", user.id + 1);\r",
+									"        item = rnd.getItem();\r",
+									"        var it = await api.addItem(item, user.id)\r",
+									"        item = rnd.getItem();\r",
+									"        pm.collectionVariables.set(\"item\", item);        \r",
+									"        pm.collectionVariables.set(\"itemId\", it.id);\r",
+									"        pm.collectionVariables.set(\"itemName\", item.name);\r",
+									"        pm.collectionVariables.set(\"itemAvailable\", item.available);\r",
+									"        pm.collectionVariables.set(\"itemDescription\", item.description);\r",
+									"\r",
+									"    } catch(err) {\r",
+									"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+									"    }\r",
+									"\r",
+									"};\r",
+									"\r",
+									"const interval = setInterval(() => {}, 1000);\r",
+									"\r",
+									"setTimeout(async () => \r",
+									"    {\r",
+									"        try {\r",
+									"            await main();\r",
+									"        } catch (e) {\r",
+									"            console.error(e);\r",
+									"        } finally {\r",
+									"            clearInterval(interval);\r",
+									"        }\r",
+									"    },  \r",
+									"    100 \r",
+									");"
+								],
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -1415,7 +1670,7 @@
 						"header": [
 							{
 								"key": "X-Sharer-User-Id",
-								"value": "3",
+								"value": "{{userId}}",
 								"type": "text"
 							},
 							{
@@ -1431,29 +1686,23 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Дрель\",\n    \"description\": \"Простая дрель\",\n    \"available\": false\n}"
+							"raw": "{\n    \"name\": \"{{itemName}}\",\n    \"description\": \"{{itemDescription}}\",\n    \"available\": {{itemAvailable}}\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items/:itemId",
+							"raw": "{{baseUrl}}/items/{{itemId}}",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"items",
-								":itemId"
-							],
-							"variable": [
-								{
-									"key": "itemId",
-									"value": "1"
-								}
+								"{{itemId}}"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "item update available",
+					"name": "Item update available field",
 					"event": [
 						{
 							"listen": "test",
@@ -1462,195 +1711,66 @@
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.be.ok;",
 									"});",
-									"pm.test(\"Has item update response\", function () {",
+									"pm.test(\"Response have body\", function () {",
 									"    pm.response.to.be.withBody;",
 									"    pm.response.to.be.json;",
 									"});",
-									"pm.test(\"Test item 'id' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('id');",
-									"    pm.expect(jsonData.id, '\"id\" must be 1').to.eql(1);",
-									"});",
-									"pm.test(\"Test item 'name' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('name');",
-									"    pm.expect(jsonData.name, '\"name\" must be \"Дрель+\"').to.eql('Дрель+');",
-									"});",
-									"pm.test(\"Test item 'description' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('description');",
-									"    pm.expect(jsonData.description, '\"description\" must be \"Аккумуляторная дрель\"').to.eql('Аккумуляторная дрель');",
-									"});",
-									"pm.test(\"Test item 'available' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('available');",
-									"    pm.expect(jsonData.available, '\"available\" must be \"true\"').to.true;",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "X-Sharer-User-Id",
-								"value": "1",
-								"type": "text"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Accept",
-								"value": "*/*",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"available\": true\n}"
-						},
-						"url": {
-							"raw": "{{baseUrl}}/items/:itemId",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"items",
-								":itemId"
-							],
-							"variable": [
-								{
-									"key": "itemId",
-									"value": "1"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "item update description",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.be.ok;",
-									"});",
-									"pm.test(\"Has item update response\", function () {",
-									"    pm.response.to.be.withBody;",
-									"    pm.response.to.be.json;",
-									"});",
-									"pm.test(\"Test item 'id' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('id');",
-									"    pm.expect(jsonData.id, '\"id\" must be 1').to.eql(1);",
-									"});",
-									"pm.test(\"Test item 'name' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('name');",
-									"    pm.expect(jsonData.name, '\"name\" must be \"Дрель+\"').to.eql('Дрель+');",
-									"});",
-									"pm.test(\"Test item 'description' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('description');",
-									"    pm.expect(jsonData.description, '\"description\" must be \"Аккумуляторная дрель + аккумулятор\"').to.eql('Аккумуляторная дрель + аккумулятор');",
-									"});",
-									"pm.test(\"Test item 'available' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('available');",
-									"    pm.expect(jsonData.available, '\"available\" must be \"true\"').to.true;",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "X-Sharer-User-Id",
-								"value": "1",
-								"type": "text"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Accept",
-								"value": "*/*",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n   \"description\": \"Аккумуляторная дрель + аккумулятор\"\n}"
-						},
-						"url": {
-							"raw": "{{baseUrl}}/items/:itemId",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"items",
-								":itemId"
-							],
-							"variable": [
-								{
-									"key": "itemId",
-									"value": "1"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "item update name",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
+									"var item = pm.collectionVariables.get(\"item\");",
 									"",
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.be.ok;",
-									"});",
-									"pm.test(\"Has item update response\", function () {",
-									"    pm.response.to.be.withBody;",
-									"    pm.response.to.be.json;",
-									"});",
-									"pm.test(\"Test item 'id' field\", function () {",
+									"pm.test(\"Response data equal to request\", function () {",
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('id');",
-									"    pm.expect(jsonData.id, '\"id\" must be 1').to.eql(1);",
-									"});",
-									"pm.test(\"Test item 'name' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('name');",
-									"    pm.expect(jsonData.name, '\"name\" must be \"Аккумуляторная дрель\"').to.eql('Аккумуляторная дрель');",
-									"});",
-									"pm.test(\"Test item 'description' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('description');",
-									"    pm.expect(jsonData.description, '\"description\" must be \"Аккумуляторная дрель + аккумулятор\"').to.eql('Аккумуляторная дрель + аккумулятор');",
-									"});",
-									"pm.test(\"Test item 'available' field\", function () {",
-									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('available');",
-									"    pm.expect(jsonData.available, '\"available\" must be \"true\"').to.true;",
+									"    pm.expect(jsonData.available.toString(), `\"available\" must be ${item.available}`).to.eql(item.available.toString());",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const main = async () => {\r",
+									"    const api = new API(pm);\r",
+									"    const rnd = new RandomUtils();\r",
+									"\r",
+									"    try {\r",
+									"        user = await api.addUser(rnd.getUser());\r",
+									"        pm.collectionVariables.set(\"userId\", user.id);\r",
+									"        item = rnd.getItem();\r",
+									"        var it = await api.addItem(item, user.id)\r",
+									"        item = rnd.getItem();\r",
+									"        pm.collectionVariables.set(\"item\", item);        \r",
+									"        pm.collectionVariables.set(\"itemId\", it.id);\r",
+									"        pm.collectionVariables.set(\"itemName\", item.name);\r",
+									"        pm.collectionVariables.set(\"itemAvailable\", item.available);\r",
+									"        pm.collectionVariables.set(\"itemDescription\", item.description);\r",
+									"\r",
+									"    } catch(err) {\r",
+									"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+									"    }\r",
+									"\r",
+									"};\r",
+									"\r",
+									"const interval = setInterval(() => {}, 1000);\r",
+									"\r",
+									"setTimeout(async () => \r",
+									"    {\r",
+									"        try {\r",
+									"            await main();\r",
+									"        } catch (e) {\r",
+									"            console.error(e);\r",
+									"        } finally {\r",
+									"            clearInterval(interval);\r",
+									"        }\r",
+									"    },  \r",
+									"    100 \r",
+									");"
+								],
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -1659,7 +1779,7 @@
 						"header": [
 							{
 								"key": "X-Sharer-User-Id",
-								"value": "1",
+								"value": "{{userId}}",
 								"type": "text"
 							},
 							{
@@ -1675,22 +1795,238 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n   \"name\": \"Аккумуляторная дрель\"\n}"
+							"raw": "{\n    \"available\": {{itemAvailable}}\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/items/:itemId",
+							"raw": "{{baseUrl}}/items/{{itemId}}",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"items",
-								":itemId"
+								"{{itemId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Item update description field",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.be.ok;",
+									"});",
+									"pm.test(\"Response have body\", function () {",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"var item = pm.collectionVariables.get(\"item\");",
+									"",
+									"pm.test(\"Response data equal to request\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('id');",
+									"    pm.expect(jsonData).to.have.property('name');",
+									"    pm.expect(jsonData).to.have.property('description');",
+									"    pm.expect(jsonData).to.have.property('available');",
+									"    pm.expect(jsonData.description, `\"description\" must be ${item.description}`).to.eql(item.description);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const main = async () => {\r",
+									"    const api = new API(pm);\r",
+									"    const rnd = new RandomUtils();\r",
+									"\r",
+									"    try {\r",
+									"        user = await api.addUser(rnd.getUser());\r",
+									"        pm.collectionVariables.set(\"userId\", user.id);\r",
+									"        item = rnd.getItem();\r",
+									"        var it = await api.addItem(item, user.id)\r",
+									"        item = rnd.getItem();\r",
+									"        pm.collectionVariables.set(\"item\", item);        \r",
+									"        pm.collectionVariables.set(\"itemId\", it.id);\r",
+									"        pm.collectionVariables.set(\"itemName\", item.name);\r",
+									"        pm.collectionVariables.set(\"itemAvailable\", item.available);\r",
+									"        pm.collectionVariables.set(\"itemDescription\", item.description);\r",
+									"\r",
+									"    } catch(err) {\r",
+									"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+									"    }\r",
+									"\r",
+									"};\r",
+									"\r",
+									"const interval = setInterval(() => {}, 1000);\r",
+									"\r",
+									"setTimeout(async () => \r",
+									"    {\r",
+									"        try {\r",
+									"            await main();\r",
+									"        } catch (e) {\r",
+									"            console.error(e);\r",
+									"        } finally {\r",
+									"            clearInterval(interval);\r",
+									"        }\r",
+									"    },  \r",
+									"    100 \r",
+									");"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "X-Sharer-User-Id",
+								"value": "{{userId}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"description\": \"{{itemDescription}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/items/{{itemId}}",
+							"host": [
+								"{{baseUrl}}"
 							],
-							"variable": [
-								{
-									"key": "itemId",
-									"value": "1"
-								}
+							"path": [
+								"items",
+								"{{itemId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Item update name field",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.be.ok;",
+									"});",
+									"pm.test(\"Response have body\", function () {",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"var item = pm.collectionVariables.get(\"item\");",
+									"",
+									"pm.test(\"Response data equal to request\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('id');",
+									"    pm.expect(jsonData).to.have.property('name');",
+									"    pm.expect(jsonData).to.have.property('description');",
+									"    pm.expect(jsonData).to.have.property('available');",
+									"    pm.expect(jsonData.name, `\"name\" must be ${item.name}`).to.eql(item.name);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const main = async () => {\r",
+									"    const api = new API(pm);\r",
+									"    const rnd = new RandomUtils();\r",
+									"\r",
+									"    try {\r",
+									"        user = await api.addUser(rnd.getUser());\r",
+									"        pm.collectionVariables.set(\"userId\", user.id);\r",
+									"        item = rnd.getItem();\r",
+									"        var it = await api.addItem(item, user.id)\r",
+									"        item = rnd.getItem();\r",
+									"        pm.collectionVariables.set(\"item\", item);        \r",
+									"        pm.collectionVariables.set(\"itemId\", it.id);\r",
+									"        pm.collectionVariables.set(\"itemName\", item.name);\r",
+									"        pm.collectionVariables.set(\"itemAvailable\", item.available);\r",
+									"        pm.collectionVariables.set(\"itemDescription\", item.description);\r",
+									"\r",
+									"    } catch(err) {\r",
+									"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+									"    }\r",
+									"\r",
+									"};\r",
+									"\r",
+									"const interval = setInterval(() => {}, 1000);\r",
+									"\r",
+									"setTimeout(async () => \r",
+									"    {\r",
+									"        try {\r",
+									"            await main();\r",
+									"        } catch (e) {\r",
+									"            console.error(e);\r",
+									"        } finally {\r",
+									"            clearInterval(interval);\r",
+									"        }\r",
+									"    },  \r",
+									"    100 \r",
+									");"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "X-Sharer-User-Id",
+								"value": "{{userId}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"{{itemName}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/items/{{itemId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"items",
+								"{{itemId}}"
 							]
 						}
 					},
@@ -1703,36 +2039,70 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"",
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.be.ok;",
 									"});",
-									"pm.test(\"Has item create response\", function () {",
+									"pm.test(\"Response have body\", function () {",
 									"    pm.response.to.be.withBody;",
 									"    pm.response.to.be.json;",
 									"});",
-									"pm.test(\"Test item 'id' field\", function () {",
+									"var item = pm.collectionVariables.get(\"item\");",
+									"",
+									"pm.test(\"Response data equal to request\", function () {",
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('id');",
-									"    pm.expect(jsonData.id, '\"id\" must be 1').to.eql(1);",
-									"});",
-									"pm.test(\"Test item 'name' field\", function () {",
-									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('name');",
-									"    pm.expect(jsonData.name, '\"name\" must be \"Аккумуляторная дрель\"').to.eql('Аккумуляторная дрель');",
-									"});",
-									"pm.test(\"Test item 'description' field\", function () {",
-									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('description');",
-									"    pm.expect(jsonData.description, '\"description\" must be \"Аккумуляторная дрель + аккумулятор\"').to.eql('Аккумуляторная дрель + аккумулятор');",
-									"});",
-									"pm.test(\"Test item 'available' field\", function () {",
-									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('available');",
-									"    pm.expect(jsonData.available, '\"available\" must be \"true\"').to.true;",
+									"    pm.expect(jsonData.name, `\"name\" must be ${item.name}`).to.eql(item.name);",
+									"    pm.expect(jsonData.description, `\"description\" must be ${item.description}`).to.eql(item.description);",
+									"    pm.expect(jsonData.available.toString(), `\"available\" must be ${item.available}`).to.eql(item.available.toString());",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const main = async () => {\r",
+									"    const api = new API(pm);\r",
+									"    const rnd = new RandomUtils();\r",
+									"\r",
+									"    try {\r",
+									"        user = await api.addUser(rnd.getUser());\r",
+									"        pm.collectionVariables.set(\"userId\", user.id);\r",
+									"        item = await api.addItem(rnd.getItem(), user.id)\r",
+									"        pm.collectionVariables.set(\"item\", item);\r",
+									"        pm.collectionVariables.set(\"itemId\", item.id);\r",
+									"        pm.collectionVariables.set(\"itemName\", item.name);\r",
+									"        pm.collectionVariables.set(\"itemAvailable\", item.available);\r",
+									"        pm.collectionVariables.set(\"itemDescription\", item.description);\r",
+									"    } catch(err) {\r",
+									"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+									"    }\r",
+									"\r",
+									"};\r",
+									"\r",
+									"const interval = setInterval(() => {}, 1000);\r",
+									"\r",
+									"setTimeout(async () => \r",
+									"    {\r",
+									"        try {\r",
+									"            await main();\r",
+									"        } catch (e) {\r",
+									"            console.error(e);\r",
+									"        } finally {\r",
+									"            clearInterval(interval);\r",
+									"        }\r",
+									"    },  \r",
+									"    100 \r",
+									");"
+								],
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -1751,237 +2121,20 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/items/:itemId",
+							"raw": "{{baseUrl}}/items/{{itemId}}",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"items",
-								":itemId"
-							],
-							"variable": [
-								{
-									"key": "itemId",
-									"value": "1"
-								}
+								"{{itemId}}"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Item 2 create",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200 or 201\", function () {",
-									"    pm.expect(pm.response.code).to.be.oneOf([200,201]);",
-									"});",
-									"pm.test(\"Has item create response\", function () {",
-									"    pm.response.to.be.withBody;",
-									"    pm.response.to.be.json;",
-									"});",
-									"pm.test(\"Test item 'id' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('id');",
-									"    pm.expect(jsonData.id, '\"id\" must be 2').to.eql(2);",
-									"});",
-									"pm.test(\"Test item 'name' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('name');",
-									"    pm.expect(jsonData.name, '\"name\" must be \"Отвертка\"').to.eql('Отвертка');",
-									"});",
-									"pm.test(\"Test item 'description' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('description');",
-									"    pm.expect(jsonData.description, '\"description\" must be \"Аккумуляторная отвертка\"').to.eql('Аккумуляторная отвертка');",
-									"});",
-									"pm.test(\"Test item 'available' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('available');",
-									"    pm.expect(jsonData.available, '\"available\" must be \"true\"').to.true;",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "X-Sharer-User-Id",
-								"value": "3",
-								"type": "text"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Accept",
-								"value": "*/*",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"Отвертка\",\n    \"description\": \"Аккумуляторная отвертка\",\n    \"available\": true\n}"
-						},
-						"url": {
-							"raw": "{{baseUrl}}/items",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"items"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Item get all user 1",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.be.ok;",
-									"});",
-									"pm.test(\"Test list item response\", function () {",
-									"    pm.response.to.be.withBody;",
-									"    pm.response.to.be.json;",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.length, 'List length must be 1').to.eql(1);",
-									"});",
-									"",
-									"pm.test(\"Test item[0] 'id' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0]).to.have.property('id');",
-									"    pm.expect(jsonData[0].id, '\"id\" must be 1').to.eql(1);",
-									"});",
-									"pm.test(\"Test item[0] 'name' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0]).to.have.property('name');",
-									"    pm.expect(jsonData[0].name, '\"name\" must be \"Аккумуляторная дрель\"').to.eql('Аккумуляторная дрель');",
-									"});",
-									"pm.test(\"Test item[0] 'description' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0]).to.have.property('description');",
-									"    pm.expect(jsonData[0].description, '\"description\" must be \"Аккумуляторная дрель + аккумулятор\"').to.eql('Аккумуляторная дрель + аккумулятор');",
-									"});",
-									"pm.test(\"Test item[0] 'available' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0]).to.have.property('available');",
-									"    pm.expect(jsonData[0].available, '\"available\" must be \"true\"').to.true;",
-									"});",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "X-Sharer-User-Id",
-								"value": "1",
-								"type": "text"
-							},
-							{
-								"key": "Accept",
-								"value": "*/*",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{baseUrl}}/items",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"items"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Item get all user 3",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.be.ok;",
-									"});",
-									"pm.test(\"Test list item response\", function () {",
-									"    pm.response.to.be.withBody;",
-									"    pm.response.to.be.json;",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.length, 'List length must be 1').to.eql(1);",
-									"});",
-									"",
-									"pm.test(\"Test item[0] 'id' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0]).to.have.property('id');",
-									"    pm.expect(jsonData[0].id, '\"id\" must be 2').to.eql(2);",
-									"});",
-									"pm.test(\"Test item[0] 'name' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0]).to.have.property('name');",
-									"    pm.expect(jsonData[0].name, '\"name\" must be \"Отвертка\"').to.eql('Отвертка');",
-									"});",
-									"pm.test(\"Test item[0] 'description' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0]).to.have.property('description');",
-									"    pm.expect(jsonData[0].description, '\"description\" must be \"Аккумуляторная отвертка\"').to.eql('Аккумуляторная отвертка');",
-									"});",
-									"pm.test(\"Test item[0] 'available' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0]).to.have.property('available');",
-									"    pm.expect(jsonData[0].available, '\"available\" must be \"true\"').to.true;",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "X-Sharer-User-Id",
-								"value": "3",
-								"type": "text"
-							},
-							{
-								"key": "Accept",
-								"value": "*/*",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{baseUrl}}/items",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"items"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Item search аккумуляторная",
+					"name": "Get all items from user",
 					"event": [
 						{
 							"listen": "test",
@@ -1997,49 +2150,48 @@
 									"    pm.expect(jsonData.length, 'List length must be 2').to.eql(2);",
 									"});",
 									"",
-									"pm.test(\"Test item[0] 'id' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0]).to.have.property('id');",
-									"    pm.expect(jsonData[0].id, '\"id\" must be 1').to.eql(1);",
-									"});",
-									"pm.test(\"Test item[0] 'name' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0]).to.have.property('name');",
-									"    pm.expect(jsonData[0].name, '\"name\" must be \"Аккумуляторная дрель\"').to.eql('Аккумуляторная дрель');",
-									"});",
-									"pm.test(\"Test item[0] 'description' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0]).to.have.property('description');",
-									"    pm.expect(jsonData[0].description, '\"description\" must be \"Аккумуляторная дрель + аккумулятор\"').to.eql('Аккумуляторная дрель + аккумулятор');",
-									"});",
-									"pm.test(\"Test item[0] 'available' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0]).to.have.property('available');",
-									"    pm.expect(jsonData[0].available, '\"available\" must be \"true\"').to.true;",
-									"});",
-									"",
-									"pm.test(\"Test item[1] 'id' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[1]).to.have.property('id');",
-									"    pm.expect(jsonData[1].id, '\"id\" must be 2').to.eql(2);",
-									"});",
-									"pm.test(\"Test item[1] 'name' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[1]).to.have.property('name');",
-									"    pm.expect(jsonData[1].name, '\"name\" must be \"Отвертка\"').to.eql('Отвертка');",
-									"});",
-									"pm.test(\"Test item[1] 'description' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[1]).to.have.property('description');",
-									"    pm.expect(jsonData[1].description, '\"description\" must be \"Аккумуляторная отвертка\"').to.eql('Аккумуляторная отвертка');",
-									"});",
-									"pm.test(\"Test item[1] 'available' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[1]).to.have.property('available');",
-									"    pm.expect(jsonData[1].available, '\"available\" must be \"true\"').to.true;",
-									"});"
+									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const main = async () => {\r",
+									"    const api = new API(pm);\r",
+									"    const rnd = new RandomUtils();\r",
+									"\r",
+									"    try {\r",
+									"        user = await api.addUser(rnd.getUser());\r",
+									"        pm.collectionVariables.set(\"userId\", user.id);\r",
+									"        await api.addItem(rnd.getItem(), user.id)\r",
+									"        await api.addItem(rnd.getItem(), user.id)\r",
+									"    } catch(err) {\r",
+									"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+									"    }\r",
+									"\r",
+									"};\r",
+									"\r",
+									"const interval = setInterval(() => {}, 1000);\r",
+									"\r",
+									"setTimeout(async () => \r",
+									"    {\r",
+									"        try {\r",
+									"            await main();\r",
+									"        } catch (e) {\r",
+									"            console.error(e);\r",
+									"        } finally {\r",
+									"            clearInterval(interval);\r",
+									"        }\r",
+									"    },  \r",
+									"    100 \r",
+									");"
+								],
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -2048,7 +2200,7 @@
 						"header": [
 							{
 								"key": "X-Sharer-User-Id",
-								"value": "1",
+								"value": "{{userId}}",
 								"type": "text"
 							},
 							{
@@ -2058,26 +2210,19 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/items/search?text=аккУМУляторная",
+							"raw": "{{baseUrl}}/items",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"items",
-								"search"
-							],
-							"query": [
-								{
-									"key": "text",
-									"value": "аккУМУляторная"
-								}
+								"items"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "item update set unavailable",
+					"name": "Item search",
 					"event": [
 						{
 							"listen": "test",
@@ -2086,117 +2231,62 @@
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.be.ok;",
 									"});",
-									"pm.test(\"Has item update response\", function () {",
-									"    pm.response.to.be.withBody;",
-									"    pm.response.to.be.json;",
-									"});",
-									"pm.test(\"Test item 'id' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('id');",
-									"    pm.expect(jsonData.id, '\"id\" must be 2').to.eql(2);",
-									"});",
-									"pm.test(\"Test item 'name' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('name');",
-									"    pm.expect(jsonData.name, '\"name\" must be \"Отвертка\"').to.eql('Отвертка');",
-									"});",
-									"pm.test(\"Test item 'description' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('description');",
-									"    pm.expect(jsonData.description, '\"description\" must be \"Аккумуляторная отвертка\"').to.eql('Аккумуляторная отвертка');",
-									"});",
-									"pm.test(\"Test item 'available' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('available');",
-									"    pm.expect(jsonData.available, '\"available\" must be \"false\"').to.false;",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "X-Sharer-User-Id",
-								"value": "3",
-								"type": "text"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Accept",
-								"value": "*/*",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"available\": false\n}"
-						},
-						"url": {
-							"raw": "{{baseUrl}}/items/:itemId",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"items",
-								":itemId"
-							],
-							"variable": [
-								{
-									"key": "itemId",
-									"value": "2"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Item search дрель",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.be.ok;",
-									"});",
-									"pm.test(\"Test search item response\", function () {",
+									"pm.test(\"Test list item response\", function () {",
 									"    pm.response.to.be.withBody;",
 									"    pm.response.to.be.json;",
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData.length, 'List length must be 1').to.eql(1);",
-									"});",
-									"",
-									"pm.test(\"Test item[0] 'id' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0]).to.have.property('id');",
-									"    pm.expect(jsonData[0].id, '\"id\" must be 1').to.eql(1);",
-									"});",
-									"pm.test(\"Test item[0] 'name' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0]).to.have.property('name');",
-									"    pm.expect(jsonData[0].name, '\"name\" must be \"Аккумуляторная дрель\"').to.eql('Аккумуляторная дрель');",
-									"});",
-									"pm.test(\"Test item[0] 'description' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0]).to.have.property('description');",
-									"    pm.expect(jsonData[0].description, '\"description\" must be \"Аккумуляторная дрель + аккумулятор\"').to.eql('Аккумуляторная дрель + аккумулятор');",
-									"});",
-									"pm.test(\"Test item[0] 'available' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0]).to.have.property('available');",
-									"    pm.expect(jsonData[0].available, '\"available\" must be \"true\"').to.true;",
+									"    pm.expect(jsonData[0].name.toUpperCase(), 'Name should include ' + pm.collectionVariables.get(\"searchString\")).to.eql(pm.collectionVariables.get(\"searchString\"))",
 									"});",
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const main = async () => {\r",
+									"    const api = new API(pm);\r",
+									"    const rnd = new RandomUtils();\r",
+									"\r",
+									"    try {\r",
+									"        user = await api.addUser(rnd.getUser());\r",
+									"        pm.collectionVariables.set(\"userId\", user.id);\r",
+									"        it = rnd.getItem()\r",
+									"        it.available = true\r",
+									"        item = await api.addItem(it, user.id)\r",
+									"        pm.collectionVariables.set(\"item\", item);\r",
+									"        pm.collectionVariables.set(\"itemId\", item.id);\r",
+									"        pm.collectionVariables.set(\"itemName\", item.name);\r",
+									"        pm.collectionVariables.set(\"searchString\", item.name.toUpperCase());\r",
+									"        pm.collectionVariables.set(\"itemAvailable\", item.available);\r",
+									"        pm.collectionVariables.set(\"itemDescription\", item.description);\r",
+									"    } catch(err) {\r",
+									"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+									"    }\r",
+									"\r",
+									"};\r",
+									"\r",
+									"const interval = setInterval(() => {}, 1000);\r",
+									"\r",
+									"setTimeout(async () => \r",
+									"    {\r",
+									"        try {\r",
+									"            await main();\r",
+									"        } catch (e) {\r",
+									"            console.error(e);\r",
+									"        } finally {\r",
+									"            clearInterval(interval);\r",
+									"        }\r",
+									"    },  \r",
+									"    100 \r",
+									");"
+								],
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -2215,7 +2305,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/items/search?text=дРелЬ",
+							"raw": "{{baseUrl}}/items/search?text={{searchString}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -2226,7 +2316,7 @@
 							"query": [
 								{
 									"key": "text",
-									"value": "дРелЬ"
+									"value": "{{searchString}}"
 								}
 							]
 						}
@@ -2234,7 +2324,7 @@
 					"response": []
 				},
 				{
-					"name": "Item search аккумуляторная available",
+					"name": "Item search unavailable",
 					"event": [
 						{
 							"listen": "test",
@@ -2243,191 +2333,61 @@
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.be.ok;",
 									"});",
-									"pm.test(\"Test search item response\", function () {",
+									"pm.test(\"Test list item response\", function () {",
 									"    pm.response.to.be.withBody;",
 									"    pm.response.to.be.json;",
 									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.length, 'List length must be 1').to.eql(1);",
-									"});",
-									"",
-									"pm.test(\"Test item[0] 'id' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0]).to.have.property('id');",
-									"    pm.expect(jsonData[0].id, '\"id\" must be 1').to.eql(1);",
-									"});",
-									"pm.test(\"Test item[0] 'name' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0]).to.have.property('name');",
-									"    pm.expect(jsonData[0].name, '\"name\" must be \"Аккумуляторная дрель\"').to.eql('Аккумуляторная дрель');",
-									"});",
-									"pm.test(\"Test item[0] 'description' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0]).to.have.property('description');",
-									"    pm.expect(jsonData[0].description, '\"description\" must be \"Аккумуляторная дрель + аккумулятор\"').to.eql('Аккумуляторная дрель + аккумулятор');",
-									"});",
-									"pm.test(\"Test item[0] 'available' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0]).to.have.property('available');",
-									"    pm.expect(jsonData[0].available, '\"available\" must be \"true\"').to.true;",
+									"    pm.expect(jsonData.length, 'List length must be 0').to.eql(0);",
 									"});",
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "X-Sharer-User-Id",
-								"value": "1",
-								"type": "text"
-							},
-							{
-								"key": "Accept",
-								"value": "*/*",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{baseUrl}}/items/search?text=аккУМУляторная",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"items",
-								"search"
-							],
-							"query": [
-								{
-									"key": "text",
-									"value": "аккУМУляторная"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "item update set available",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.be.ok;",
-									"});",
-									"pm.test(\"Has item update response\", function () {",
-									"    pm.response.to.be.withBody;",
-									"    pm.response.to.be.json;",
-									"});",
-									"pm.test(\"Test item 'id' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('id');",
-									"    pm.expect(jsonData.id, '\"id\" must be 2').to.eql(2);",
-									"});",
-									"pm.test(\"Test item 'name' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('name');",
-									"    pm.expect(jsonData.name, '\"name\" must be \"Отвертка\"').to.eql('Отвертка');",
-									"});",
-									"pm.test(\"Test item 'description' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('description');",
-									"    pm.expect(jsonData.description, '\"description\" must be \"Аккумуляторная отвертка\"').to.eql('Аккумуляторная отвертка');",
-									"});",
-									"pm.test(\"Test item 'available' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.have.property('available');",
-									"    pm.expect(jsonData.available, '\"available\" must be \"true\"').to.true;",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "X-Sharer-User-Id",
-								"value": "3",
-								"type": "text"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Accept",
-								"value": "*/*",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"available\": true\n}"
 						},
-						"url": {
-							"raw": "{{baseUrl}}/items/:itemId",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"items",
-								":itemId"
-							],
-							"variable": [
-								{
-									"key": "itemId",
-									"value": "2"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Item search отвертка",
-					"event": [
 						{
-							"listen": "test",
+							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.be.ok;",
-									"});",
-									"pm.test(\"Test search item response\", function () {",
-									"    pm.response.to.be.withBody;",
-									"    pm.response.to.be.json;",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.length, 'List length must be 1').to.eql(1);",
-									"});",
-									"pm.test(\"Test item[0] 'id' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0]).to.have.property('id');",
-									"    pm.expect(jsonData[0].id, '\"id\" must be 2').to.eql(2);",
-									"});",
-									"pm.test(\"Test item[0] 'name' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0]).to.have.property('name');",
-									"    pm.expect(jsonData[0].name, '\"name\" must be \"Отвертка\"').to.eql('Отвертка');",
-									"});",
-									"pm.test(\"Test item[0] 'description' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0]).to.have.property('description');",
-									"    pm.expect(jsonData[0].description, '\"description\" must be \"Аккумуляторная отвертка\"').to.eql('Аккумуляторная отвертка');",
-									"});",
-									"pm.test(\"Test item[0] 'available' field\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0]).to.have.property('available');",
-									"    pm.expect(jsonData[0].available, '\"available\" must be \"true\"').to.true;",
-									"});"
+									"const main = async () => {\r",
+									"    const api = new API(pm);\r",
+									"    const rnd = new RandomUtils();\r",
+									"\r",
+									"    try {\r",
+									"        user = await api.addUser(rnd.getUser());\r",
+									"        pm.collectionVariables.set(\"userId\", user.id);\r",
+									"        it = rnd.getItem()\r",
+									"        it.available = false\r",
+									"        item = await api.addItem(it, user.id)\r",
+									"        pm.collectionVariables.set(\"item\", item);\r",
+									"        pm.collectionVariables.set(\"itemId\", item.id);\r",
+									"        pm.collectionVariables.set(\"itemName\", item.name);\r",
+									"        pm.collectionVariables.set(\"searchString\", item.name.toUpperCase());\r",
+									"        pm.collectionVariables.set(\"itemAvailable\", item.available);\r",
+									"        pm.collectionVariables.set(\"itemDescription\", item.description);\r",
+									"    } catch(err) {\r",
+									"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+									"    }\r",
+									"\r",
+									"};\r",
+									"\r",
+									"const interval = setInterval(() => {}, 1000);\r",
+									"\r",
+									"setTimeout(async () => \r",
+									"    {\r",
+									"        try {\r",
+									"            await main();\r",
+									"        } catch (e) {\r",
+									"            console.error(e);\r",
+									"        } finally {\r",
+									"            clearInterval(interval);\r",
+									"        }\r",
+									"    },  \r",
+									"    100 \r",
+									");"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -2446,7 +2406,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/items/search?text=оТверТ",
+							"raw": "{{baseUrl}}/items/search?text={{searchString}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -2457,7 +2417,7 @@
 							"query": [
 								{
 									"key": "text",
-									"value": "оТверТ"
+									"value": "{{searchString}}"
 								}
 							]
 						}
@@ -2521,10 +2481,244 @@
 			]
 		}
 	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"API = class {\r",
+					"    constructor(postman, verbose = false, baseUrl = \"http://localhost:8080\") {\r",
+					"        this.baseUrl = baseUrl;\r",
+					"        this.pm = postman;\r",
+					"        this._verbose = verbose;\r",
+					"    }\r",
+					"\r",
+					"    async addUser(user, id=0, verbose=null) {\r",
+					"        return this.post(\"/users\", user, id, \"Ошибка при добавлении нового пользователя: \", verbose);\r",
+					"    }\r",
+					"\r",
+					"    async addItem(item, id=0, verbose=null) {\r",
+					"        return this.post(\"/items\", item, id, \"Ошибка при добавлении новой вещи: \", verbose);\r",
+					"    }\r",
+					"\r",
+					"    async addRequest(request, id=0, verbose=null) {\r",
+					"        return this.post(\"/requests\", request, id, \"Ошибка при добавлении нового запроса: \", verbose);\r",
+					"    }\r",
+					"    \r",
+					"    async post(path, body, id=0, errorText = \"Ошибка при выполнении post-запроса: \", verbose=null) {\r",
+					"        return this.sendRequest(\"POST\", path, body, id, errorText, verbose);\r",
+					"    }\r",
+					"\r",
+					"    async patch(path, body = null, id=0, errorText = \"Ошибка при выполнении patch-запроса: \", verbose=null) {\r",
+					"        return this.sendRequest(\"PATCH\", path, body, id, errorText, verbose);\r",
+					"    }\r",
+					"\r",
+					"    async get(path, body = null, id=0, errorText = \"Ошибка при выполнении get-запроса: \", verbose=null) {\r",
+					"        return this.sendRequest(\"GET\", path, body, id, errorText, verbose);\r",
+					"    }\r",
+					"\r",
+					"    async put(path, body = null, id=0, errorText = \"Ошибка при выполнении put-запроса: \", verbose=null) {\r",
+					"        return this.sendRequest(\"PUT\", path, body, id, errorText, verbose);\r",
+					"    }\r",
+					"\r",
+					"    async delete(path, body = null, id=0, errorText = \"Ошибка при выполнении delte-запроса: \", verbose=null) {\r",
+					"        return this.sendRequest(\"DELETE\", path, body, id, errorText, verbose);\r",
+					"    }\r",
+					"\r",
+					"    async sendRequest(method, path, body=null, id=0, errorText = \"Ошибка при выполнении запроса: \", verbose=null) {\r",
+					"        return new Promise((resolve, reject) => {\r",
+					"            verbose = verbose == null ? this._verbose : verbose;\r",
+					"            var req = {};\r",
+					"            if (id == 0){\r",
+					"                req = {\r",
+					"                    url: this.baseUrl + path,\r",
+					"                    method: method,\r",
+					"                    body: body == null ? \"\" : JSON.stringify(body),\r",
+					"                    header: { \"Content-Type\": \"application/json\"},\r",
+					"                };\r",
+					"            }else{\r",
+					"                req = {\r",
+					"                    url: this.baseUrl + path,\r",
+					"                    method: method,\r",
+					"                    body: body == null ? \"\" : JSON.stringify(body),\r",
+					"                    header: [{\r",
+					"                        \"key\": \"X-Sharer-User-Id\",\r",
+					"                        \"value\": id,\r",
+					"                        \"type\": \"text\",\r",
+					"                    },\r",
+					"                    {\r",
+					"                        \"key\": \"Content-Type\",\r",
+					"                        \"name\": \"Content-Type\",\r",
+					"                        \"value\": \"application/json\",\r",
+					"                        \"type\": \"text\"\r",
+					"                    }]\r",
+					"                };\r",
+					"            }\r",
+					"            if(verbose) {\r",
+					"                console.log(\"Отправляю запрос: \", req);\r",
+					"            }\r",
+					"\r",
+					"            try {\r",
+					"                this.pm.sendRequest(req, (error, response) => {\r",
+					"                    if(error || (response.code >= 400 && response.code <= 599)) {\r",
+					"                        let err = error ? error : JSON.stringify(response.json());\r",
+					"                        console.error(\"При выполнении запроса к серверу возникла ошибка.\\n\", err,\r",
+					"                             \"\\nДля отладки проблемы повторите такой же запрос к вашей программе \" + \r",
+					"                             \"на локальном компьютере. Данные запроса:\\n\", JSON.stringify(request));\r",
+					"\r",
+					"                        reject(new Error(errorText + err));\r",
+					"                    }\r",
+					"                    if(verbose) {\r",
+					"                        console.log(\"Результат обработки запроса: код состояния - \", response.code, \", тело: \", response.json());\r",
+					"                    }\r",
+					"                    if (response.stream.length === 0){\r",
+					"                        resolve(null);\r",
+					"                    }else{\r",
+					"                        resolve(response.json());\r",
+					"                    }\r",
+					"                });\r",
+					"                \r",
+					"            } catch(err) {\r",
+					"                if(verbose) {\r",
+					"                    console.error(errorText, err);\r",
+					"                }\r",
+					"                return Promise.reject(err);\r",
+					"            }\r",
+					"        });\r",
+					"    }\r",
+					"};\r",
+					"\r",
+					"RandomUtils = class {\r",
+					"    constructor() {}\r",
+					"\r",
+					"    getUser() {\r",
+					"        return {\r",
+					"            name: pm.variables.replaceIn('{{$randomFullName}}'),\r",
+					"            email: pm.variables.replaceIn('{{$randomEmail}}'),\r",
+					"        };\r",
+					"    }\r",
+					"\r",
+					"    getRequest() {\r",
+					"        return {\r",
+					"            description: this.getWord(50)\r",
+					"        };\r",
+					"    }\r",
+					"\r",
+					"    getItem() {\r",
+					"        return {\r",
+					"            name: this.getWord(10),\r",
+					"            description: this.getWord(50),\r",
+					"            available: pm.variables.replaceIn('{{$randomBoolean}}')\t\r",
+					"        };\r",
+					"    }\r",
+					"\r",
+					"    getItemForRequest(id) {\r",
+					"        return {\r",
+					"            name: this.getWord(10),\r",
+					"            description: this.getWord(50),\r",
+					"            available: pm.variables.replaceIn('{{$randomBoolean}}'),\r",
+					"            requestId: id\r",
+					"        };\r",
+					"    }\r",
+					"\r",
+					"    getFilm(director=null) {\r",
+					"        let date = new Date(new Date(1960, 0, 1).getTime() + Math.random() * (new Date(2010, 0, 1).getTime() - new Date(1960, 0, 1).getTime()));\r",
+					"        var toReturn = {\r",
+					"            name: this.getWord(15),\r",
+					"            description: this.getWord(50),\r",
+					"            releaseDate: date.toISOString().slice(0,10),\r",
+					"            duration: Math.floor(Math.random() * (180 - 60 + 1) + 60),\r",
+					"            mpa: { id: Math.floor(Math.random() * (5 - 1 + 1) + 1)},\r",
+					"            genres: [{ id: Math.floor(Math.random() * (6 - 1 + 1) + 1)}]\r",
+					"        };\r",
+					"        if (director!==null)\r",
+					"            toReturn.directors = [{ id: director.id}];\r",
+					"        return toReturn;\r",
+					"    }\r",
+					"\r",
+					"\r",
+					"    getWord(length = 1) {\r",
+					"        let result = '';\r",
+					"        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';\r",
+					"        const charactersLength = characters.length;\r",
+					"        let counter = 0;\r",
+					"        while (counter < length) {\r",
+					"            result += characters.charAt(Math.floor(Math.random() * charactersLength));\r",
+					"            counter += 1;\r",
+					"        }\r",
+					"        return result;\r",
+					"    }\r",
+					"\r",
+					"        getName(length = 1) {\r",
+					"        let result = '';\r",
+					"        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';\r",
+					"        const charactersLength = characters.length;\r",
+					"        let counter = 0;\r",
+					"        while (counter < length) {\r",
+					"            result += characters.charAt(Math.floor(Math.random() * charactersLength));\r",
+					"            counter += 1;\r",
+					"        }\r",
+					"        return result;\r",
+					"    }\r",
+					"\r",
+					"}"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
 	"variable": [
 		{
 			"key": "baseUrl",
 			"value": "http://localhost:8080"
+		},
+		{
+			"key": "userName",
+			"value": ""
+		},
+		{
+			"key": "userEmail",
+			"value": ""
+		},
+		{
+			"key": "userId",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "item",
+			"value": ""
+		},
+		{
+			"key": "itemName",
+			"value": ""
+		},
+		{
+			"key": "itemAvailable",
+			"value": ""
+		},
+		{
+			"key": "itemDescription",
+			"value": ""
+		},
+		{
+			"key": "itemId",
+			"value": ""
+		},
+		{
+			"key": "searchString",
+			"value": ""
 		}
 	]
 }
